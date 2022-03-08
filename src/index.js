@@ -83,6 +83,14 @@ class Game extends React.Component{
         });
     }
 
+    reset(){
+      this.setState({
+        stepNumber:0,
+        xIsNext:true,
+        history:this.state.history.slice(0,1),
+      });
+    }
+
     render(){
         const history=this.state.history;
         const current=history[this.state.stepNumber];
@@ -91,7 +99,7 @@ class Game extends React.Component{
         const moves=history.map((step,move)=>{
             const desc=move?
                 'Go to move #'+move:
-                'Go to gamem start';
+                'Go to game start';
             return(
                 <li key={move}>
                     <button onClick={()=>this.jumpTo(move)}>{desc}</button>
@@ -102,6 +110,8 @@ class Game extends React.Component{
         let status;
         if (winner){
             status='Winner: '+winner;
+        }else if(this.state.stepNumber===9){
+            status='Tie';
         }else{
             status='Next player: '+(this.state.xIsNext?'X':'O');
         }
@@ -115,9 +125,10 @@ class Game extends React.Component{
                     />
                 </div>
                 <div className="game-info">
-                    <div>{status}</div>
+                    <div className="status">{status}</div>
                     <ol>{moves}</ol>
                 </div>
+                <button className="reset" onClick={()=>this.reset()}>Reset</button>
             </div>
         );
     }
